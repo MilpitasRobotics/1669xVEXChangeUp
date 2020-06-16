@@ -7,5 +7,6 @@ void setdrive(int left, int right);
 void motorDrive();
 
 //calling auton functions created in drive.cpp
-void moveForward();
-void moveBack();
+void moveForward(double units, int voltage);
+void moveBack(double units, int voltage);
+void resetEncoders();

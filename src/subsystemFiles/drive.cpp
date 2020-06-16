@@ -1,5 +1,4 @@
 #include "main.h"
-using namespace okapi;
 
 //function to set values to the motors
 void setdrive(int left, int right) {
@@ -18,18 +17,46 @@ void motorDrive() {
   setdrive(left, right);
 }
 
-//Auton functions
-auto chassis = ChassisControllerFactory::create(leftFront, rightFront, leftBack, rightBack);
-void moveForward() {
-  leftFront.move_absolute(1000, 200);
-  leftBack.move_absolute(-1000, 200);
-  rightFront.move_absolute(-1000, 200);
-  rightBack.move_absolute(1000, 200);
+double avgEncoderVal() {
+  return (fabs(leftFront.get_position()) + fabs(leftBack.get_position())
+    + fabs(rightFront.get_position()) + fabs(rightBack.get_position())) / 4;
 }
 
-void moveBack() {
-  leftFront.move_absolute(-1000, 200);
-  leftBack.move_absolute(1000, 200);
-  rightFront.move_absolute(1000, 200);
-  rightBack.move_absolute(-1000, 200);
+//Auton functions
+
+void resetEncoders() {
+  leftFront.tare_position();
+  leftBack.tare_position();
+  rightFront.tare_position();
+  rightBack.tare_position();
+}
+
+void moveForward(double units, int voltage) {
+  //reset encoders
+  resetEncoders();
+  //drive forward
+  while(avgEncoderVal() < units) {
+    setdrive(voltage, voltage);
+    pros::delay(2);
+  }
+  //brake (give setdrive() function a small negative value to slowly break)
+  setdrive(-10, -10);
+  pros::delay(50);
+  //set drive to 0 so that once the delay is over, it doesn't move
+  setdrive(0, 0);
+}
+
+void moveBack(double units, int voltage) {
+  //reset encoders
+  resetEncoders();
+  //drive forward
+  while(avgEncoderVal() < units) {
+    setdrive(-voltage, -voltage);
+    pros::delay(2);
+  }
+  //brake (give setdrive() function a small negative value to slowly break)
+  setdrive(10, 10);
+  pros::delay(50);
+  //set drive to 0 so that once the delay is over, it doesn't move
+  setdrive(0, 0);
 }

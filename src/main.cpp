@@ -4,11 +4,11 @@
 void initialize() {
 	//initialize() function code
 	pros::lcd::initialize();
-	//print velocity of motors of the drivetrain to Brain
-  	pros::lcd::set_text(1, __STRING(_LONG_DOUBLE(leftFront.get_actual_velocity())));
-  	pros::lcd::set_text(2, __STRING(_LONG_DOUBLE(leftBack.get_actual_velocity())));
-  	pros::lcd::set_text(3, __STRING(_LONG_DOUBLE(rightFront.get_actual_velocity())));
-  	pros::lcd::set_text(4, __STRING(_LONG_DOUBLE(rightBack.get_actual_velocity())));
+	
+	leftFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	leftBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	rightFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	rightBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
 }
 
@@ -18,8 +18,8 @@ void disabled() {
 
 //autonomous function code
 void autonomous() {
-	moveForward();
-	moveBack();
+	moveForward(1000, 200);
+	moveBack(1000, 200);
 }
 
 void opcontrol() {
