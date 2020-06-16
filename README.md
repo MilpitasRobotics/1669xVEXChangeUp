@@ -5,6 +5,7 @@
 ## Tools/Hardware used
 
 Vex PROS
+
 Inerital sensors
 
 ## Specifications
@@ -15,5 +16,7 @@ Inerital sensors
 ```
 ## Authors
 
-Kathan Sheth(email: kathansheth04@gmail.com)
+Kathan Sheth(email: sheth.kathan04@gmail.com)
+
 Chenghao Li(email: chenghaoli36@gmail.com)
+
