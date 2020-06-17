@@ -2,11 +2,11 @@
 
 1669x Milpitas Xtreme Robotics source code for 2020-2021 VEX challenge "Change UP". This will house all of our code for this vex season.
 
-## Tools/Hardware used
+## Tools/Hardware used and their purposes
 
-Vex PROS
+Vex PROS - open source program to run our code
 
-Inerital sensors
+2 Inerital sensors - contains a gyro which we can use to accurate turn and move our robot in auton or for a macro
 
 ## Specifications
 
@@ -14,9 +14,10 @@ Inerital sensors
 4 mtr tank drive(200rpm)
 4 mtr xdrive/omnidrive(200rpm)
 ```
-## Authors
+## Contributers/Members
 
-Kathan Sheth(email: sheth.kathan04@gmail.com)
+Kathan Sheth(for code related questions, email: sheth.kathan04@gmail.com)
 
-Chenghao Li(email: chenghaoli36@gmail.com)
+Chenghao Li(for code related questions, email: chenghaoli36@gmail.com)
 
+Eugene Ng(for drivetrain or design questions, email: eugene1862@gmail.com)
