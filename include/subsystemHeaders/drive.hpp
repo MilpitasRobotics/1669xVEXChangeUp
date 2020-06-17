@@ -10,3 +10,4 @@ void motorDrive();
 void moveForward(double units, int voltage);
 void moveBack(double units, int voltage);
 void resetEncoders();
+void turn(double degrees, int voltage);

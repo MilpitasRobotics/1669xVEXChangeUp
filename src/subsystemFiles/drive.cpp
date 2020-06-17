@@ -60,3 +60,29 @@ void moveBack(double units, int voltage) {
   //set drive to 0 so that once the delay is over, it doesn't move
   setdrive(0, 0);
 }
+
+void turn(double degrees, int voltage) {
+  int direction = abs(degrees)/degrees;
+  imu_sensor.reset();
+
+  setdrive(voltage*direction, -voltage*direction);
+  while(fabs(imu_sensor.get_rotation()) < abs(degrees*10)-50) {
+    pros::delay(10);
+  }
+  pros::delay(100);
+  if(fabs(imu_sensor.get_rotation()) > abs(degrees*10)) {
+    setdrive(0.5*(-voltage)*direction, 0.5*voltage*direction);
+    while(fabs(imu_sensor.get_rotation()) > abs(degrees*10)) {
+      pros::delay(10); 
+    }
+  }
+  else if(fabs(imu_sensor.get_rotation()) < abs(degrees*10)) {
+    setdrive(0.5*voltage*direction, 0.5*(-voltage)*direction);
+    while(fabs(imu_sensor.get_rotation()) > abs(degrees*10)) {
+      pros::delay(10); 
+    }
+  }
+
+  setdrive(0,0);
+
+}
