@@ -8,7 +8,7 @@ Vex PROS - open source program to run our code
 
 2 Inerital sensors - contains a gyro which we can use to accurate turn and move our robot in auton or for a macro
 
-## Specifications
+### Specifications
 
 ```
 4 mtr tank drive(200rpm)
