@@ -26,7 +26,7 @@ void autonomous() {
 void opcontrol() {
 	//opcontrol() function code
 	while (true) {
-		motorDrive();
+		xDrive();
 		pros::delay(2);
 	}
 }

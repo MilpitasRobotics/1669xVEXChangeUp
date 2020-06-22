@@ -1,4 +1,7 @@
 #include "main.h"
+#include "okapi/api.hpp"
+using namespace okapi;
+using namespace okapi::literals;
 
 //function to set values to the motors
 void setdrive(int left, int right) {
@@ -16,6 +19,17 @@ void motorDrive() {
   int right = power - turn;
   setdrive(left, right);
 }
+
+void xDrive() {
+  int power = controller.get_analog(ANALOG_LEFT_Y);
+  int turn = controller.get_analog(ANALOG_RIGHT_X);
+  int strafe = controller.get_analog(ANALOG_LEFT_X);
+  leftFront = power - strafe + turn;
+  rightFront = power - strafe + turn;
+  leftBack = power + strafe - turn;
+  rightBack = power + strafe - turn; 
+}
+
 
 double avgEncoderVal() {
   return (fabs(leftFront.get_position()) + fabs(leftBack.get_position())
