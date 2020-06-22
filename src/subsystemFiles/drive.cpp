@@ -24,10 +24,10 @@ void xDrive() {
   int power = controller.get_analog(ANALOG_LEFT_Y);
   int turn = controller.get_analog(ANALOG_RIGHT_X);
   int strafe = controller.get_analog(ANALOG_LEFT_X);
-  leftFront = power - strafe + turn;
-  rightFront = power - strafe + turn;
-  leftBack = power + strafe - turn;
-  rightBack = power + strafe - turn; 
+  leftFront = power - strafe - turn;
+  rightFront = power + strafe - turn;
+  leftBack = power - strafe + turn;
+  rightBack = power + strafe + turn; 
 }
 
 
