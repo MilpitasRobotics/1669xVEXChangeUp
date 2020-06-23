@@ -25,9 +25,12 @@ void autonomous() {
 
 void opcontrol() {
 	//opcontrol() function code
+	pros::lcd::initialize();
 	while (true) {
+		pros::lcd::print(1, "heading value: %f\n", imu_sensor.get_heading());
+		pros::lcd::print(2, "rotation value: %f\n", imu_sensor.get_rotation());
 		xDrive();
-		pros::delay(2);
+		pros::delay(20);
 	}
 }
 
