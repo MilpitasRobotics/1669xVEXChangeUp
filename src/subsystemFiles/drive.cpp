@@ -27,10 +27,10 @@ void xDrive() {
   leftFront = power + strafe + turn;
   rightFront = strafe - power + turn;
   leftBack = power - strafe + turn;
-  rightBack = turn - power - strafe; 
+  rightBack = turn - power - strafe;
 }
 
-
+//Returns average encoder values from the 4 drive motors
 double avgEncoderVal() {
   return (fabs(leftFront.get_position()) + fabs(leftBack.get_position())
     + fabs(rightFront.get_position()) + fabs(rightBack.get_position())) / 4;
@@ -38,6 +38,7 @@ double avgEncoderVal() {
 
 //Auton functions
 
+//self explanitory
 void resetEncoders() {
   leftFront.tare_position();
   leftBack.tare_position();
@@ -75,7 +76,7 @@ void moveBack(double units, int voltage) {
   pros::delay(50);
   //set drive to 0 so that once the delay is over, it doesn't move
   setdrive(0, 0);
-  
+
 }
 
 void turn(int degrees, int voltage) {
@@ -96,14 +97,14 @@ void turn(int degrees, int voltage) {
   if(fabs(imu_sensor.get_heading()*10) > abs(degrees)*10) {
     setdrive(0.5*(-voltage)*direction, 0.5*voltage*direction);
     while(fabs(imu_sensor.get_heading()) > abs(degrees)) {
-      pros::delay(20); 
+      pros::delay(20);
     }
   }
   //if undershoot, turn more until reached desired degrees of rotation
   else if(fabs(imu_sensor.get_heading()) < abs(degrees)) {
     setdrive(0.5*voltage*direction, 0.5*(-voltage)*direction);
     while(fabs(imu_sensor.get_heading()) > abs(degrees)) {
-      pros::delay(20); 
+      pros::delay(20);
     }
   }
 
