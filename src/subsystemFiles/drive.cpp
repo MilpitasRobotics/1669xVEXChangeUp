@@ -78,7 +78,7 @@ void moveBack(double units, int voltage) {
   setdrive(0, 0);
 
 }
-//old turn code based off an online tutorial on imu turning
+//old turn code based off an online tutorial on gyro turning
 /*
 void turn(int degrees, int voltage) {
   //identify direction
@@ -115,17 +115,12 @@ void turn(int degrees, int voltage) {
 }
 */
 
-int pidturn(int degrees, int voltage) {
-  //identify the direction that we need to turn toward
-  int direction = abs(degrees)/degrees;
-  //reset encoders and inertial sensor
-  imu_sensor.reset();
-  resetEncoders();
-  kp = 0.8;
-  error = fabs(fabs(imu_sensor.get_heading())-abs(degrees));
+int pidturn(int degrees,int speedscale = 1) {
+  float kp = 0.8;
+  float error = fabs(imu_sensor.get_heading())-abs(degrees);
   while(error>1){
     error = fabs(fabs(imu_sensor.get_heading())-abs(degrees));
-    setdrive(error*kp*direction,-error*kp*direction);
+    setdrive(error*kp,-error*kp);
     pros::delay(5);
   }
   setdrive(0,0);
