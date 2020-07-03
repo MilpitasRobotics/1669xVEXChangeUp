@@ -20,7 +20,8 @@ void disabled() {
 void autonomous() {
 	//moveForward(1000.0, 100);
 	//moveBack(1000.0, 100);
-	turn(90, 50);
+	setdrive(0,0);
+	pidturn(90, 50);
 }
 
 void opcontrol() {

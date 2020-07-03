@@ -78,7 +78,8 @@ void moveBack(double units, int voltage) {
   setdrive(0, 0);
 
 }
-
+//old turn code based off an online tutorial on imu turning
+/*
 void turn(int degrees, int voltage) {
   //identify direction
   int direction = abs(degrees)/degrees;
@@ -88,13 +89,13 @@ void turn(int degrees, int voltage) {
 
   //turn a certain amount of degrees
   setdrive(voltage*direction, -voltage*direction);
-  while(fabs(imu_sensor.get_heading()) < abs(degrees*10)-50) {
+  while(fabs(imu_sensor.get_heading()) < abs(degrees)-50) {
     pros::delay(20);
   }
   //delay to lose momentum
   pros::delay(100);
   //if overshoot, turn a little back
-  if(fabs(imu_sensor.get_heading()*10) > abs(degrees)*10) {
+  if(fabs(imu_sensor.get_heading()) > abs(degrees)) {
     setdrive(0.5*(-voltage)*direction, 0.5*voltage*direction);
     while(fabs(imu_sensor.get_heading()) > abs(degrees)) {
       pros::delay(20);
@@ -111,4 +112,22 @@ void turn(int degrees, int voltage) {
   //set drive to 0 so that once the delay is over, it doesn't move
   setdrive(0,0);
 
+}
+*/
+
+int pidturn(int degrees, int voltage) {
+  //identify the direction that we need to turn toward
+  int direction = abs(degrees)/degrees;
+  //reset encoders and inertial sensor
+  imu_sensor.reset();
+  resetEncoders();
+  kp = 0.8;
+  error = fabs(fabs(imu_sensor.get_heading())-abs(degrees));
+  while(error>1){
+    error = fabs(fabs(imu_sensor.get_heading())-abs(degrees));
+    setdrive(error*kp*direction,-error*kp*direction);
+    pros::delay(5);
+  }
+  setdrive(0,0);
+  return 0;
 }
