@@ -117,8 +117,8 @@ void turn(int degrees, int voltage) {
 int drivePIDcontrol(int left, int right, float speedscale = 1){
   float targetLeft = leftEncoder.get_value()+left;
   float targetRight = rightEncoder.get_value()+right;
-  float errorLeft = targetleft-leftEncoder.get_value();
-  float errorRight = targetright-rightEncoder.get_value();
+  float errorLeft = targetLeft-leftEncoder.get_value();
+  float errorRight = targetRight-rightEncoder.get_value();
   float voltLeft;
   float voltRight;
   int signLeft;
