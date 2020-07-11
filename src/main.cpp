@@ -32,7 +32,7 @@ void opcontrol() {
 		pros::lcd::print(1, "heading value: %f\n", imu_sensor.get_heading());
 		pros::lcd::print(2, "rotation value: %f\n", imu_sensor.get_rotation());
 		//setting up motor temp display
-		std::string combinedtemps = std::string("LF:") + std::string(leftFront.get_temperature()) + std::string(" RF:") + std::string(rightFront.get_temperature()) + std::string(" LB:") + std::string(leftBack.get_temperature()) + std::string(" RB:") + std::string(rightBack.get_temperature());
+		std::string combinedtemps = std::string("LF:") + std::to_string(leftFront.get_temperature()) + std::string(" RF:") + std::to_string(rightFront.get_temperature()) + std::string(" LB:") + std::to_string(leftBack.get_temperature()) + std::string(" RB:") + std::to_string(rightBack.get_temperature());
 		pros::lcd::print(3, "Temperatures: LF: %f\n", combinedtemps);
 		//Runs drive
 		xDrive();

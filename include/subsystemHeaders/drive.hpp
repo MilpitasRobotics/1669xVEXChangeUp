@@ -12,4 +12,5 @@ void xDrive();
 void moveForward(double units, int voltage);
 void moveBack(double units, int voltage);
 void resetEncoders();
-void turn(int degrees, int voltage);
+int pidturn(int degrees,float speedscale=1);
+int drivePIDcontrol(int left, int right, float speedscale=1);

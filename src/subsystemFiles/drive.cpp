@@ -47,12 +47,12 @@ void resetEncoders() {
 }
 
 void moveForward(double units, int voltage) {
-  //reset encoders and inertial sensor
-  resetEncoders();
-  imu_sensor.reset();
-  //drive forward
+  //captures initial heading
+  double tempheading = imu_sensor.get_heading();
+  //drive forward until it has has the desired value
   while(avgEncoderVal() < units) {
-    setdrive(voltage+imu_sensor.get_heading(), voltage-imu_sensor.get_heading());
+    //powering motors and using initial heading values to stay moving in a straight line
+    setdrive(voltage+tempheading, voltage-tempheading);
     pros::delay(2);
   }
   //brake (give setdrive() function a small negative value to slowly break)
@@ -63,12 +63,12 @@ void moveForward(double units, int voltage) {
 }
 
 void moveBack(double units, int voltage) {
-  //reset encoders and inertial sensor
-  resetEncoders();
-  imu_sensor.reset();
-  //drive forward
-  while(avgEncoderVal() < units) {
-    setdrive(-voltage+imu_sensor.get_heading(), -voltage-imu_sensor.get_heading());
+  //captures inital heading
+  double tempheading = imu_sensor.get_heading();
+  //drive backward until it has past the desired value
+  while(avgEncoderVal() > units) {
+    //powering motors and using initial heading values to stay moving in a straight line
+    setdrive(-voltage+tempheading, -voltage-tempheading);
     pros::delay(20);
   }
   //brake (give setdrive() function a small negative value to slowly break)
@@ -76,7 +76,6 @@ void moveBack(double units, int voltage) {
   pros::delay(50);
   //set drive to 0 so that once the delay is over, it doesn't move
   setdrive(0, 0);
-
 }
 //old turn code based off an online tutorial on gyro turning
 /*
@@ -115,12 +114,49 @@ void turn(int degrees, int voltage) {
 }
 */
 
-int pidturn(int degrees,int speedscale = 1) {
-  float kp = 0.8;
-  float error = fabs(imu_sensor.get_heading())-abs(degrees);
+int drivePIDcontrol(int left, int right, float speedscale = 1){
+  float targetLeft = leftEncoder.get_value()+left;
+  float targetRight = rightEncoder.get_value()+right;
+  float errorLeft = targetleft-leftEncoder.get_value();
+  float errorRight = targetright-rightEncoder.get_value();
+  float voltLeft;
+  float voltRight;
+  int signLeft;
+  int signRight;
+  float kp = 0.25;
+  while(errorLeft>1 || errorRight>1){
+    errorLeft = targetLeft-leftEncoder.get_value();
+    errorRight = targetRight-rightEncoder.get_value();
+    signLeft = (errorLeft/fabs(errorLeft));
+    signRight = (errorRight/fabs(errorRight));
+    voltLeft = kp*errorLeft*speedscale;
+    voltRight = kp*errorRight*speedscale;
+    if(errorLeft*kp*speedscale>115){
+      voltLeft = signLeft*110;
+    }
+    if(errorRight*kp*speedscale>115){
+      voltRight = signRight*110;
+    }
+    setdrive(voltLeft,voltRight);
+  }
+  setdrive(0,0);
+  return 0;
+}
+
+int pidturn(int degrees,float speedscale = 1) {
+  float kp = 0.25;
+  float target = imu_sensor.get_heading()+degrees;
+  float error = target-imu_sensor.get_heading();
+  int sign;
+  float voltage;
   while(error>1){
-    error = fabs(fabs(imu_sensor.get_heading())-abs(degrees));
-    setdrive(error*kp,-error*kp);
+    error = target-imu_sensor.get_heading();
+    sign = (error/fabs(error));
+    voltage = error*kp*speedscale;
+    if(voltage>115){
+      voltage = 115;
+    }
+    setdrive(voltage,-voltage);
     pros::delay(5);
   }
   setdrive(0,0);
