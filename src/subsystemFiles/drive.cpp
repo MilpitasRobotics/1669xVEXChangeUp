@@ -5,10 +5,10 @@ using namespace okapi::literals;
 
 //function to set values to the motors
 void setdrive(int left, int right) {
-  leftFront = left;
-  rightFront = -right;
-  leftBack = -left;
-  rightBack = right;
+  leftFront = -left;
+  rightFront = right;
+  leftBack = left;
+  rightBack = -right;
 }
 
 void motorDrive() {
@@ -156,7 +156,7 @@ int pidturn(int degrees,float speedscale = 1) {
     if(voltage>115){
       voltage = 115;
     }
-    setdrive(voltage,-voltage);
+    setdrive(-voltage,voltage);
     pros::delay(5);
   }
   setdrive(0,0);
