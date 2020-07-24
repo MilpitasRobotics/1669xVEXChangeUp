@@ -14,3 +14,4 @@ void moveBack(double units, int voltage);
 void resetEncoders();
 int pidturn(int degrees,float speedscale);
 int drivePIDcontrol(int left, int right, float speedscale);
+void intakecontroller();

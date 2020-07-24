@@ -18,6 +18,7 @@ void motorDrive() {
   int left = power + turn;
   int right = power - turn;
   setdrive(left, right);
+  intakecontroller();
 }
 
 void xDrive() {
