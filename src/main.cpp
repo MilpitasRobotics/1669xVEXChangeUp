@@ -50,7 +50,7 @@ void opcontrol() {
 		//std::string combinedtemps = std::string("LF:") + std::to_string(leftFront.get_temperature()) + std::string(" RF:") + std::to_string(rightFront.get_temperature()) + std::string(" LB:") + std::to_string(leftBack.get_temperature()) + std::string(" RB:") + std::to_string(rightBack.get_temperature());
 		//pros::lcd::print(3, "Temperatures: LF: %f\n", combinedtemps);
 		//Runs drive
-		motorDrive();
+		//motorDrive();
 	}
 }
 
