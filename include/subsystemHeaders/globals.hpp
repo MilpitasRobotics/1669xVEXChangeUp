@@ -8,6 +8,7 @@ extern pros::Motor rightBack;
 
 extern pros::Motor leftintake;
 extern pros::Motor rightintake;
+extern pros::Motor indexer;
 
 extern pros::Imu imu_sensor;
 extern pros::ADIEncoder leftEncoder;
