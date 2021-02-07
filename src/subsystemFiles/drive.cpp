@@ -11,6 +11,13 @@ void setdrive(int left, int right) {
   rightBack = -right;
 }
 
+double encoderConvert( int inches ) {
+  double circumference = 4*pi;
+  double total_inches = 360*inches;
+  double clicks = total_inches / circumference;
+  return (clicks*7)/3;
+}
+
 void motorDrive() {
   //arcade control
   int power = controller.get_analog(ANALOG_LEFT_Y);
@@ -19,6 +26,7 @@ void motorDrive() {
   int right = power - turn;
   setdrive(left, right);
   intakecontroller();
+  launchercontroller();
 }
 
 void xDrive() {
@@ -58,7 +66,7 @@ void moveForward(double units, int voltage) {
   }
   //brake (give setdrive() function a small negative value to slowly break)
   setdrive(-10, -10);
-  pros::delay(50);
+  pros::delay(100);
   //set drive to 0 so that once the delay is over, it doesn't move
   setdrive(0, 0);
 }
@@ -74,7 +82,7 @@ void moveBack(double units, int voltage) {
   }
   //brake (give setdrive() function a small negative value to slowly break)
   setdrive(10, 10);
-  pros::delay(50);
+  pros::delay(100);
   //set drive to 0 so that once the delay is over, it doesn't move
   setdrive(0, 0);
 }
@@ -115,47 +123,76 @@ void turn(int degrees, int voltage) {
 }
 */
 
-int drivePIDcontrol(int left, int right, float speedscale = 1){
-  float targetLeft = leftEncoder.get_value()+left;
-  float targetRight = rightEncoder.get_value()+right;
-  float errorLeft = targetLeft-leftEncoder.get_value();
-  float errorRight = targetRight-rightEncoder.get_value();
+void moveForward1(double units, int speed) {
+  leftFront.move_absolute(-units, speed);
+  rightFront.move_absolute(units, speed);
+  leftBack.move_absolute(units, speed);
+  rightBack.move_absolute(-units, speed);
+  pros::delay(50);
+  //brake (give setdrive() function a small negative value to slowly break)
+  setdrive(-10, -10);
+  pros::delay(50);
+  //set drive to 0 so that once the delay is over, it doesn't move
+  setdrive(0, 0);
+}
+
+int drivePIDcontrol(float left, float right, float speedscale = 1){
+  float leftFrontpos = -leftFront.get_position();
+  float rightFrontpos = rightFront.get_position();
+  float targetLeft = leftFrontpos+left;
+  float targetRight = rightFrontpos+right;
+  float errorLeft = targetLeft-leftFrontpos;
+  float errorRight = targetRight-rightFrontpos;
   float voltLeft;
   float voltRight;
   int signLeft;
   int signRight;
-  float kp = 0.25;
-  while(errorLeft>1 || errorRight>1){
-    errorLeft = targetLeft-leftEncoder.get_value();
-    errorRight = targetRight-rightEncoder.get_value();
+  float kp = 0.1;
+  while(abs(errorLeft)>5 || abs(errorRight)>5){
+    pros::lcd::print(7, "leftFront: %f\n", leftFront.get_position());
+    leftFrontpos = -leftFront.get_position();
+    rightFrontpos = rightFront.get_position();
+    errorLeft = targetLeft-leftFrontpos;
+    errorRight = targetRight-rightFrontpos;
     signLeft = (errorLeft/fabs(errorLeft));
     signRight = (errorRight/fabs(errorRight));
     voltLeft = kp*errorLeft*speedscale;
     voltRight = kp*errorRight*speedscale;
     if(errorLeft*kp*speedscale>115){
       voltLeft = signLeft*110;
+    }else if(errorLeft*kp*speedscale<10){
+      voltLeft = signLeft*10;
     }
     if(errorRight*kp*speedscale>115){
       voltRight = signRight*110;
+    }else if(errorRight*kp*speedscale<10){
+      voltRight = signRight*10;
     }
     setdrive(voltLeft,voltRight);
+    pros::delay(5);
   }
+  setdrive(-10,-10);
+  pros::delay(100);
   setdrive(0,0);
   return 0;
 }
 
 int pidturn(int degrees,float speedscale = 1) {
-  float kp = 0.25;
+  float kp = 0.15;
   float target = imu_sensor.get_heading()+degrees;
   float error = target-imu_sensor.get_heading();
   int sign;
   float voltage;
-  while(error>1){
+  while(fabs(error)>3){
+    pros::lcd::print(1, "heading value: %f\n", imu_sensor.get_heading());
+  	pros::lcd::print(2, "rotation value: %f\n", imu_sensor.get_rotation());
     error = target-imu_sensor.get_heading();
     sign = (error/fabs(error));
     voltage = error*kp*speedscale;
     if(voltage>115){
       voltage = 115;
+    }else if(voltage<15){
+      voltage = 15;
     }
     setdrive(-voltage,voltage);
     pros::delay(5);

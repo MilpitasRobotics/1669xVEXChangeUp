@@ -1,5 +1,5 @@
 #include "main.h"
-void launchercontroller(){
+void launchercontroller() {
   if(controller.get_digital(DIGITAL_R1)){
     launcher.move_velocity(600);
   }else if(controller.get_digital(DIGITAL_R2)){
