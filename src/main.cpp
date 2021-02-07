@@ -15,11 +15,7 @@ void initialize() {
 	rightBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 	leftintake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 	rightintake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-	imu_sensor.reset();
 	pros::lcd::initialize();
-	setdrive(0,0);
-	resetEncoders();
-	pros::delay(2100);
 }
 
 void disabled() {
@@ -32,13 +28,24 @@ void autonomous() {
 	//moveBack(1000.0, 100);
 	pros::lcd::print(1, "heading value: %f\n", imu_sensor.get_heading());
 	pros::lcd::print(2, "rotation value: %f\n", imu_sensor.get_rotation());
-	pros::lcd::print(3, "atrget: %f\n", leftFront.get_position()+encoderConvert(30));
+	pros::lcd::print(3, "target: %f\n", leftFront.get_position()+encoderConvert(30));
 	pros::lcd::print(4, "t:%f\n", imu_sensor.get_heading()+90);
 	pros::lcd::print(7, "leftFront: %f\n", leftFront.get_position());
 	setintake(-600);
 	//pros::delay(500);
 	setintake(0);
-	moveForward1(encoderConvert(30), 100);
+
+  	leftFront.move_relative(-859.4, 100);
+	rightFront.move_relative(859.4, 100);
+	leftBack.move_relative(859.4, 100);
+	rightBack.move_relative(-859.4, 100); 
+	
+	// Moves 100 units forward
+  	while (!((leftFront.get_position() > -865.4) && (leftFront.get_position() < -855.4))) {
+    	// Continue running this loop as long as the motor is not within +-5 units of its goal
+    	pros::delay(2);
+  	}
+	//moveForward(859.4, 100);
 	//drivePIDcontrol(encoderConvert(23), encoderConvert(23), 0.4);
 	//pros::delay(20);
 	// pidturn(90, 0.6);

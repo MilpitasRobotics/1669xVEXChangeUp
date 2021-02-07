@@ -59,11 +59,7 @@ void moveForward(double units, int voltage) {
   //captures initial heading
   double tempheading = imu_sensor.get_heading();
   //drive forward until it has has the desired value
-  while(avgEncoderVal() < units) {
-    //powering motors and using initial heading values to stay moving in a straight line
-    setdrive(voltage+tempheading, voltage-tempheading);
-    pros::delay(2);
-  }
+  
   //brake (give setdrive() function a small negative value to slowly break)
   setdrive(-10, -10);
   pros::delay(100);
@@ -124,20 +120,21 @@ void turn(int degrees, int voltage) {
 */
 
 void moveForward1(double units, int speed) {
-  int direction = abs(units)/units;
+  int direction = fabs(units)/units;
   resetEncoders();
   while (fabs(avgEncoderVal()) < fabs(units))
   {
-    setdrive(speed*direction + imu_sensor.get_heading(), speed*direction - imu_sensor.get_heading());
+    setdrive(speed*direction, -speed*direction);
     pros::delay(10);
   }
+
   setdrive(-10, -10);
   pros::delay(50);
   setdrive(0, 0);
   
 }
 
-int drivePIDcontrol(float left, float right, float speedscale = 1){
+int drivePIDcontrol(float left, float right, float speedscale){
   float leftFrontpos = -leftFront.get_position();
   float rightFrontpos = rightFront.get_position();
   float targetLeft = leftFrontpos+left;
@@ -200,4 +197,48 @@ int pidturn(int degrees,float speedscale = 1) {
   }
   setdrive(0,0);
   return 0;
+}
+void gyroPid (double angle) {
+
+  double target;
+  
+  if(angle <= 0.0) {
+    target = 1.5;
+  }
+  
+  else {
+    target = 0.7;
+  }
+
+  // variable instantiations
+  double error = angle - imu_sensor.get_rotation();
+  double integral;
+  double derivative;
+  double prevError;
+  double kp = 0.98;
+  double ki = 0.001;
+  double kd = 5.5;
+
+  while(fabs(error) > target) {
+    error = angle - imu_sensor.get_rotation();
+    integral  = integral + error;
+    if(error == 0 || fabs(error) >= angle) {
+      integral = 0;
+    }
+  
+    derivative = error - prevError;
+    prevError = error;
+    double p = error * kp;
+    double i = integral * ki;
+    double d = derivative * kd;
+
+    double vel = p + i + d;
+
+    leftFront.move_velocity(-vel);
+    rightFront.move_velocity(vel);
+    leftBack.move_velocity(vel);
+    rightBack.move_velocity(-vel);
+
+    pros::delay(20);
+  }
 }
