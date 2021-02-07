@@ -124,16 +124,17 @@ void turn(int degrees, int voltage) {
 */
 
 void moveForward1(double units, int speed) {
-  leftFront.move_absolute(-units, speed);
-  rightFront.move_absolute(units, speed);
-  leftBack.move_absolute(units, speed);
-  rightBack.move_absolute(-units, speed);
-  pros::delay(50);
-  //brake (give setdrive() function a small negative value to slowly break)
+  int direction = abs(units)/units;
+  resetEncoders();
+  while (fabs(avgEncoderVal()) < fabs(units))
+  {
+    setdrive(speed*direction + imu_sensor.get_heading(), speed*direction - imu_sensor.get_heading());
+    pros::delay(10);
+  }
   setdrive(-10, -10);
   pros::delay(50);
-  //set drive to 0 so that once the delay is over, it doesn't move
   setdrive(0, 0);
+  
 }
 
 int drivePIDcontrol(float left, float right, float speedscale = 1){

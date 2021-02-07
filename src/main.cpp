@@ -13,6 +13,8 @@ void initialize() {
 	leftBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 	rightFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 	rightBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	leftintake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	rightintake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 	imu_sensor.reset();
 	pros::lcd::initialize();
 	setdrive(0,0);
@@ -36,9 +38,10 @@ void autonomous() {
 	setintake(-600);
 	//pros::delay(500);
 	setintake(0);
-	//drivePIDcontrol(encoderConvert(23), encoderConvert(23), 0.5);
+	moveForward1(encoderConvert(30), 100);
+	//drivePIDcontrol(encoderConvert(23), encoderConvert(23), 0.4);
 	//pros::delay(20);
-	pidturn(90, 0.6);
+	// pidturn(90, 0.6);
 	pros::lcd::print(5, "done\n");
 	// drivePIDcontrol(500,500,1);
 	// pidturn(90,1);
