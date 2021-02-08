@@ -5,10 +5,10 @@ using namespace okapi::literals;
 
 //function to set values to the motors
 void setdrive(int left, int right) {
-  leftFront = -left;
+  leftFront = left;
   rightFront = right;
   leftBack = left;
-  rightBack = -right;
+  rightBack = right;
 }
 
 double encoderConvert( int inches ) {

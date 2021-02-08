@@ -1,53 +1,116 @@
 #include "main.h"
 #include <iostream>
 #include <string.h>
-
+using namespace okapi;
 void initialize() {
 	//initialize() function code
 	pros::lcd::initialize();
-	leftFront.set_encoder_units(MOTOR_ENCODER_COUNTS);
-	leftBack.set_encoder_units(MOTOR_ENCODER_COUNTS);
-	rightFront.set_encoder_units(MOTOR_ENCODER_COUNTS);
-	rightBack.set_encoder_units(MOTOR_ENCODER_COUNTS);
-	leftFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-	leftBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-	rightFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-	rightBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-	imu_sensor.reset();
-	pros::lcd::initialize();
-	setdrive(0,0);
-	resetEncoders();
-	pros::delay(2100);
 }
 
 void disabled() {
 	//disabled() function code
 }
+auto test = ChassisControllerBuilder()
+    .withMotors({4, 3}, {2,5})
+		.withDimensions(AbstractMotor::gearset::blue,{{4.125_in, 12.75_in}, imev5BlueTPR * (7.0/3.0)})
+		.withGains(
+         { 0.00345, 0.00002, 0.00009 }, // Distance controller gains
+         { 0.0058, 0.00057, 0.00025 }, // Turn controller gains
+         { 0.00022, 0.0001, 0.00003 }  // Angle controller gains
+     )
+		.withOdometry()
+		.withMaxVelocity(200)
+    .buildOdometry();
+auto myChassis =
+  okapi::ChassisControllerBuilder()
+    .withMotors({4,3}, {2, 5})
+		.withDimensions(AbstractMotor::GearsetRatioPair(AbstractMotor::gearset::blue, 7.0/3.0), {{4.125_in, 12.75_in}, imev5BlueTPR})
+    .build();
 
+		auto test2 =
+		  AsyncMotionProfileControllerBuilder()
+		    .withLimits({
+		      0.8,  //max velocity
+		      2.0,  //max acceleration
+		      10.0  //max jerk
+		    })
+		    .withOutput(myChassis)
+		    .buildMotionProfileController();
 //autonomous function code
 void autonomous() {
-	//moveForward(1000.0, 100);
-	//moveBack(1000.0, 100);
-	pros::lcd::print(1, "heading value: %f\n", imu_sensor.get_heading());
-	pros::lcd::print(2, "rotation value: %f\n", imu_sensor.get_rotation());
-	pros::lcd::print(3, "atrget: %f\n", leftFront.get_position()+encoderConvert(30));
-	pros::lcd::print(4, "t:%f\n", imu_sensor.get_heading()+90);
-	pros::lcd::print(7, "leftFront: %f\n", leftFront.get_position());
-	setintake(-600);
-	//pros::delay(500);
+	test2->generatePath({
+		{0_in,0_in,0_deg},
+		{36_in,0_in,0_deg}},
+		"A"
+	);
+	test2->setTarget("A");
+	test2->waitUntilSettled();
+	test->turnToAngle(-70_deg);
+	test->waitUntilSettled();
+	test2->generatePath({
+		{0_in,0_in,0_deg},
+		{24_in,0_in,0_deg}},
+		"B"
+	);
+	setintake(600);
+	indexer.move_velocity(600);
+	test2->setTarget("B");
+	test2->waitUntilSettled();
+	pros::delay(500);
 	setintake(0);
-	//drivePIDcontrol(encoderConvert(23), encoderConvert(23), 0.5);
-	//pros::delay(20);
-	pidturn(90, 0.6);
-	pros::lcd::print(5, "done\n");
-	// drivePIDcontrol(500,500,1);
-	// pidturn(90,1);
-	// drivePIDcontrol(500,500,1);
-	// pidturn(90,1);
-	// drivePIDcontrol(500,500,1);
-	// pidturn(90,1);
-	// drivePIDcontrol(500,500,1);
-	// pidturn(90,1);
+	launcher.move_velocity(600);
+	pros::delay(500);
+	launcher.move_velocity(0);
+	indexer.move_velocity(0);
+	test->moveDistance(-14_in);
+	test2->waitUntilSettled();
+	test->turnAngle(-140_deg);
+	test->waitUntilSettled();
+	test2->generatePath({
+		{0_in,0_in,0_deg},
+		{48_in,0_in,0_deg}},
+		"C"
+	);
+	test2->setTarget("C");
+	test2->waitUntilSettled();
+	test->turnAngle(90_deg);
+	test->waitUntilSettled();
+	test2->generatePath({
+		{0_in,0_in,0_deg},
+		{10_in,0_in,0_deg}},
+		"D"
+	);
+	test2->setTarget("D");
+	test2->waitUntilSettled();
+	setintake(600);
+	indexer.move_velocity(600);
+	launcher.move_velocity(600);
+	pros::delay(800);
+	launcher.move_velocity(0);
+	indexer.move_velocity(0);
+	setintake(0);
+
+
+
+	//setintake(-600);
+	//pros::delay(300);
+	//setintake(0);
+	//pros::delay(500);
+	//test->moveDistance(34_in);
+	//test->waitUntilSettled();
+	//test->turnAngle(-70_deg);
+	//test->waitUntilSettled();
+	//setintake(600);
+	//indexer.move_velocity(600);
+	//test->moveDistance(20_in);
+	//pros::delay(200);
+	//test->stop();
+	//pros::delay(500);
+	//launcher.move_velocity(600);
+	//pros::delay(1000);
+	//indexer.move_velocity(0);
+	//launcher.move_velocity(0);
+	//setintake(0);
 }
 
 void opcontrol() {
@@ -67,13 +130,4 @@ void opcontrol() {
 	}
 }
 
-void competition_initialize() {
-	//competition_initialize() function code
-	//consists of auton and driver control functions
-	//meant to be kept in order of the game (auton period then driver period)
-	autonomous();
-	opcontrol();
-	while(1) {
-		pros::delay(1);
-	}
-}
+void competition_initialize() {}
