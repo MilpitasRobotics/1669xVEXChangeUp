@@ -7,6 +7,11 @@ void initialize() {
 	pros::delay(200);
 	//initialize() function code
 	pros::lcd::initialize();
+}
+void competition_initialize(){
+	pros::delay(200);
+	//initialize() function code
+	pros::lcd::initialize();
 	const char* autonNames[] = {
 		"normal",//this one is regular
 		"joe",//this one prints joe
@@ -31,8 +36,8 @@ void initialize() {
 		}else{
 			auton = 0;
 		}
+		pros::delay(5);
 	}
-	pros::delay(5);
 }
 void disabled() {
 	//disabled() function code
