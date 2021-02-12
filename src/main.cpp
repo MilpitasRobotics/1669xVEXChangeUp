@@ -2,9 +2,36 @@
 #include <iostream>
 #include <string.h>
 using namespace okapi;
+int auton = 0;
 void initialize() {
+	pros::delay(200);
 	//initialize() function code
 	pros::lcd::initialize();
+	const char* autonNames[] = {
+		"asdf",
+		"asdf2",
+		"asdf3"
+	};
+	while(true){
+		if(auton>=0 && auton<sizeof(autonNames)){
+			pros::lcd::print(1, "current auton: %f\n", autonNames[auton]);
+			pros::lcd::print(3, "press r1 to go next and r2 to go previous\n");
+			pros::lcd::print(4, "%f\n", auton);
+			if(controller.get_digital(DIGITAL_R1)){
+				auton += 1;
+				while(controller.get_digital(DIGITAL_R1)){
+					pros::delay(5);
+				}
+			}else if(controller.get_digital(DIGITAL_R2)){
+				auton -= 1;
+				while(controller.get_digital(DIGITAL_R2)){
+					pros::delay(5);
+				}
+			}
+		}else{
+			auton = 0;
+		}
+	}
 }
 
 void disabled() {
@@ -37,86 +64,90 @@ auto myChassis =
 		    .buildMotionProfileController();
 //autonomous function code
 void autonomous() {
-	setintake(-600);
-	pros::delay(200);
-	setintake(0);
-	test2->generatePath({
-		{0_in,0_in,0_deg},
-		{36_in,0_in,0_deg}},
-		"A"
-	);
-	test2->setTarget("A");
-	test2->waitUntilSettled();
-	test->turnToAngle(-70_deg);
-	test->waitUntilSettled();
-	test2->generatePath({
-		{0_in,0_in,0_deg},
-		{24_in,0_in,0_deg}},
-		"B"
-	);
-	setintake(600);
-	indexer.move_velocity(600);
-	test2->setTarget("B");
-	test2->waitUntilSettled();
-	pros::delay(500);
-	setintake(0);
-	launcher.move_velocity(600);
-	pros::delay(600);
-	launcher.move_velocity(-600);
-	indexer.move_velocity(-600);
-	setintake(-600);
-	test->moveDistance(-14_in);
-	test2->waitUntilSettled();
-	launcher.move_velocity(0);
-	indexer.move_velocity(0);
-	setintake(0);
-	test->turnAngle(-145_deg);
-	test->waitUntilSettled();
-	test2->generatePath({
-		{0_in,0_in,0_deg},
-		{48_in,0_in,0_deg}},
-		"C"
-	);
-	test2->setTarget("C");
-	test2->waitUntilSettled();
-	test->turnAngle(95_deg);
-	test->waitUntilSettled();
-	test2->generatePath({
-		{0_in,0_in,0_deg},
-		{14_in,0_in,0_deg}},
-		"D"
-	);
-	test2->setTarget("D");
-	test2->waitUntilSettled();
-	setintake(600);
-	indexer.move_velocity(600);
-	launcher.move_velocity(600);
-	pros::delay(1000);
-	launcher.move_velocity(0);
-	indexer.move_velocity(0);
-	setintake(0);
+	if(auton == 1){
+		pros::lcd::print(3, "joe\n");
+	}else{
+		setintake(-600);
+		pros::delay(200);
+		setintake(0);
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{36_in,0_in,0_deg}},
+			"A"
+		);
+		test2->setTarget("A");
+		test2->waitUntilSettled();
+		test->turnToAngle(-70_deg);
+		test->waitUntilSettled();
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{24_in,0_in,0_deg}},
+			"B"
+		);
+		setintake(600);
+		indexer.move_velocity(600);
+		test2->setTarget("B");
+		test2->waitUntilSettled();
+		pros::delay(500);
+		setintake(0);
+		launcher.move_velocity(600);
+		pros::delay(600);
+		launcher.move_velocity(-600);
+		indexer.move_velocity(-600);
+		setintake(-600);
+		test->moveDistance(-14_in);
+		test2->waitUntilSettled();
+		launcher.move_velocity(0);
+		indexer.move_velocity(0);
+		setintake(0);
+		test->turnAngle(-145_deg);
+		test->waitUntilSettled();
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{48_in,0_in,0_deg}},
+			"C"
+		);
+		test2->setTarget("C");
+		test2->waitUntilSettled();
+		test->turnAngle(95_deg);
+		test->waitUntilSettled();
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{14_in,0_in,0_deg}},
+			"D"
+		);
+		test2->setTarget("D");
+		test2->waitUntilSettled();
+		setintake(600);
+		indexer.move_velocity(600);
+		launcher.move_velocity(600);
+		pros::delay(1000);
+		launcher.move_velocity(0);
+		indexer.move_velocity(0);
+		setintake(0);
 
 
 
-	//setintake(-600);
-	//pros::delay(300);
-	//setintake(0);
-	//pros::delay(500);
-	//test->moveDistance(34_in);
-	//test->waitUntilSettled();
-	//test->turnAngle(-70_deg);
-	//test->waitUntilSettled();
-	//setintake(600);
-	//indexer.move_velocity(600);
-	//test->moveDistance(20_in);
-	//pros::delay(200);
-	//test->stop();
-	//pros::delay(500);
-	//launcher.move_velocity(600);
-	//pros::delay(1000);
-	//indexer.move_velocity(0);
-	//launcher.move_velocity(0);
-	//setintake(0);
+		//setintake(-600);
+		//pros::delay(300);
+		//setintake(0);
+		//pros::delay(500);
+		//test->moveDistance(34_in);
+		//test->waitUntilSettled();
+		//test->turnAngle(-70_deg);
+		//test->waitUntilSettled();
+		//setintake(600);
+		//indexer.move_velocity(600);
+		//test->moveDistance(20_in);
+		//pros::delay(200);
+		//test->stop();
+		//pros::delay(500);
+		//launcher.move_velocity(600);
+		//pros::delay(1000);
+		//indexer.move_velocity(0);
+		//launcher.move_velocity(0);
+		//setintake(0);
+	}
 }
 
 void opcontrol() {
