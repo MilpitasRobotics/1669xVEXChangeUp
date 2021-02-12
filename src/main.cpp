@@ -7,6 +7,32 @@ void initialize() {
 	pros::delay(200);
 	//initialize() function code
 	pros::lcd::initialize();
+}
+void disabled() {
+	//disabled() function code
+}
+//autonomous function code
+void autonomous() {
+	autonhandler(auton);
+}
+void opcontrol() {
+	//opcontrol() function code
+	pros::lcd::initialize();
+	while (true) {
+		//Returns Heading and Rotation values from imu_sensor
+		pros::lcd::print(1, "heading value: %f\n", imu_sensor.get_heading());
+		pros::lcd::print(2, "rotation value: %f\n", imu_sensor.get_rotation());
+		pros::lcd::print(3, "leftFront: %f\n", leftFront.get_position());
+		//setting up motor temp display
+		//std::string combinedtemps = std::string("LF:") + std::to_string(leftFront.get_temperature()) + std::string(" RF:") + std::to_string(rightFront.get_temperature()) + std::string(" LB:") + std::to_string(leftBack.get_temperature()) + std::string(" RB:") + std::to_string(rightBack.get_temperature());
+		//pros::lcd::print(3, "Temperatures: LF: %f\n", combinedtemps);
+		//Runs drive
+		motorDrive();
+		launchercontroller();
+	}
+}
+
+void competition_initialize() {
 	const char* autonNames[] = {
 		"normal",//this one is regular
 		"joe",//this one prints joe
@@ -34,28 +60,3 @@ void initialize() {
 	}
 	pros::delay(5);
 }
-void disabled() {
-	//disabled() function code
-}
-//autonomous function code
-void autonomous() {
-	autonhandler(auton);
-}
-void opcontrol() {
-	//opcontrol() function code
-	pros::lcd::initialize();
-	while (true) {
-		//Returns Heading and Rotation values from imu_sensor
-		pros::lcd::print(1, "heading value: %f\n", imu_sensor.get_heading());
-		pros::lcd::print(2, "rotation value: %f\n", imu_sensor.get_rotation());
-		pros::lcd::print(3, "leftFront: %f\n", leftFront.get_position());
-		//setting up motor temp display
-		//std::string combinedtemps = std::string("LF:") + std::to_string(leftFront.get_temperature()) + std::string(" RF:") + std::to_string(rightFront.get_temperature()) + std::string(" LB:") + std::to_string(leftBack.get_temperature()) + std::string(" RB:") + std::to_string(rightBack.get_temperature());
-		//pros::lcd::print(3, "Temperatures: LF: %f\n", combinedtemps);
-		//Runs drive
-		motorDrive();
-		launchercontroller();
-	}
-}
-
-void competition_initialize() {}
