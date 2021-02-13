@@ -8,6 +8,33 @@ void initialize() {
 	//initialize() function code
 	pros::lcd::initialize();
 }
+void competition_initialize(){
+	pros::delay(200);
+	//initialize() function code
+	pros::lcd::initialize();
+	const int autoCount = 2;
+const char* autoNames[autoCount] = {
+	"test",
+	"2 goal"
+};
+
+	pros::lcd::set_text(0, "Select an Auton");
+	pros::lcd::print(2, "%s", autoNames[auton]);
+
+	while(1){
+		if(choose.get_new_press()) {
+			auton++;
+		if(auton == autoCount)
+			auton = 0;
+
+		pros::lcd::print(2, "%s", autoNames[auton]);
+		pros::lcd::print(3, "%d", auton);
+	}
+
+	pros::delay(50);
+}
+}
+
 void disabled() {
 	//disabled() function code
 }
@@ -30,33 +57,4 @@ void opcontrol() {
 		motorDrive();
 		launchercontroller();
 	}
-}
-
-void competition_initialize() {
-	const char* autonNames[] = {
-		"normal",//this one is regular
-		"joe",//this one prints joe
-		"normal"//this is also regular
-	};
-	while(true){
-		if(auton>=0 && auton<sizeof(autonNames)){
-			pros::lcd::print(1, "current auton: %f\n", autonNames[auton]);
-			pros::lcd::print(3, "press r1 to go next and r2 to go previous\n");
-			pros::lcd::print(4, "%f\n", auton);
-			if(controller.get_digital(DIGITAL_R1)){
-				auton += 1;
-				while(controller.get_digital(DIGITAL_R1)){
-					pros::delay(5);
-				}
-			}else if(controller.get_digital(DIGITAL_R2)){
-				auton -= 1;
-				while(controller.get_digital(DIGITAL_R2)){
-					pros::delay(5);
-				}
-			}
-		}else{
-			auton = 0;
-		}
-	}
-	pros::delay(5);
 }

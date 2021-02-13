@@ -15,6 +15,7 @@ pros::Motor launcher(9,pros::E_MOTOR_GEARSET_06,false, pros::E_MOTOR_ENCODER_COU
 pros::Imu imu_sensor(13);
 pros::ADIEncoder leftEncoder('C','D');
 pros::ADIEncoder rightEncoder('A','B');
+pros::ADIDigitalIn choose('H');
 
 //controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
