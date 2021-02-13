@@ -19,9 +19,9 @@ void competition_initialize(){
 	};
 	while(true){
 		if(auton>=0 && auton<sizeof(autonNames)){
-			pros::lcd::print(1, "current auton: %f\n", autonNames[auton]);
+			pros::lcd::print(1, "current auton: %s\n", autonNames[auton]);
 			pros::lcd::print(3, "press r1 to go next and r2 to go previous\n");
-			pros::lcd::print(4, "%f\n", auton);
+			pros::lcd::print(4, "%d\n", auton);
 			if(controller.get_digital(DIGITAL_R1)){
 				auton += 1;
 				while(controller.get_digital(DIGITAL_R1)){
