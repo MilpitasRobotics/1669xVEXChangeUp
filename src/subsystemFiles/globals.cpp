@@ -19,3 +19,6 @@ pros::ADIDigitalIn choose('H');
 
 //controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
+
+//limit switch
+pros::ADIDigitalIn lswitch('H');

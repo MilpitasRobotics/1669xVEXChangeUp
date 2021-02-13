@@ -19,3 +19,6 @@ extern pros::ADIDigitalIn choose;
 
 //controller
 extern pros::Controller controller;
+
+//Limit
+extern pros::ADIDigitalIn lswitch;
