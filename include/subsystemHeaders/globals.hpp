@@ -18,3 +18,6 @@ extern pros::ADIEncoder rightEncoder;
 
 //controller
 extern pros::Controller controller;
+
+//Limit
+extern pros::ADIDigitalIn lswitch;

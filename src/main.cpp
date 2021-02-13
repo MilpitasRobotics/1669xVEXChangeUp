@@ -21,7 +21,7 @@ void competition_initialize(){
 		pros::lcd::print(1, "current auton: %s\n", autonNames[auton]);
 		pros::lcd::print(3, "press switch to go next\n");
 		pros::lcd::print(4, "%d\n", auton);
-		if(controller.get_digital(DIGITAL_R1)){
+		if(lswitch.get_new_press()){
 			if(auton==sizeof(autonNames))
 				auton = 0;
 			else

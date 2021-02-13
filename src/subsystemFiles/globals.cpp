@@ -20,4 +20,4 @@ pros::ADIEncoder rightEncoder('A','B');
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 //limit switch
-pros::ADIDigitalIn choose('H');
+pros::ADIDigitalIn lswitch('H');
