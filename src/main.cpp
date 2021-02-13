@@ -22,10 +22,9 @@ void competition_initialize(){
 		pros::lcd::print(3, "press switch to go next\n");
 		pros::lcd::print(4, "%d\n", auton);
 		if(lswitch.get_new_press()){
+			auton += 1;
 			if(auton==sizeof(autonNames))
 				auton = 0;
-			else
-				auton += 1;
 		}
 		pros::delay(5);
 	}
