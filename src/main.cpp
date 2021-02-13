@@ -18,23 +18,14 @@ void competition_initialize(){
 		"normal"//this is also regular
 	};
 	while(true){
-		if(auton>=0 && auton<sizeof(autonNames)){
-			pros::lcd::print(1, "current auton: %s\n", autonNames[auton]);
-			pros::lcd::print(3, "press r1 to go next and r2 to go previous\n");
-			pros::lcd::print(4, "%d\n", auton);
-			if(controller.get_digital(DIGITAL_R1)){
+		pros::lcd::print(1, "current auton: %s\n", autonNames[auton]);
+		pros::lcd::print(3, "press switch to go next\n");
+		pros::lcd::print(4, "%d\n", auton);
+		if(controller.get_digital(DIGITAL_R1)){
+			if(auton==sizeof(autonNames))
+				auton = 0;
+			else
 				auton += 1;
-				while(controller.get_digital(DIGITAL_R1)){
-					pros::delay(5);
-				}
-			}else if(controller.get_digital(DIGITAL_R2)){
-				auton -= 1;
-				while(controller.get_digital(DIGITAL_R2)){
-					pros::delay(5);
-				}
-			}
-		}else{
-			auton = 0;
 		}
 		pros::delay(5);
 	}
@@ -62,5 +53,3 @@ void opcontrol() {
 		launchercontroller();
 	}
 }
-
-void competition_initialize() {}
