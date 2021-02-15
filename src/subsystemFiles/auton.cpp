@@ -28,9 +28,7 @@ auto myChassis =
 		    .withOutput(myChassis)
 		    .buildMotionProfileController();
 void autonhandler(int auton){
-  if(auton == 1){
-		pros::lcd::print(3, "joe\n");
-	}else{
+  if(auton == 0){
 		setintake(-600);
 		pros::delay(200);
 		setintake(0);
@@ -55,7 +53,7 @@ void autonhandler(int auton){
 		pros::delay(500);
 		setintake(0);
 		launcher.move_velocity(600);
-		pros::delay(600);
+		pros::delay(500);
 		launcher.move_velocity(-600);
 		indexer.move_velocity(-600);
 		setintake(-600);
@@ -77,7 +75,103 @@ void autonhandler(int auton){
 		test->waitUntilSettled();
 		test2->generatePath({
 			{0_in,0_in,0_deg},
-			{14_in,0_in,0_deg}},
+			{16_in,0_in,0_deg}},
+			"D"
+		);
+		/*test2->setTarget("D");
+		test2->waitUntilSettled();
+		setintake(600);
+		indexer.move_velocity(600);
+		launcher.move_velocity(600);
+		pros::delay(500);
+		setintake(0);
+		pros::delay(200);
+		launcher.move_velocity(0);
+		indexer.move_velocity(0);*/
+	}
+	if(auton==1){
+		setintake(-600);
+		pros::delay(100);
+		setintake(600);
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{24_in,0_in,0_deg}},
+			"A"
+		);
+		test2->setTarget("A");
+		test2->waitUntilSettled();
+		test->turnAngle(-143_deg);
+		test->waitUntilSettled();
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{28_in,0_in,0_deg}},
+			"B"
+		);
+		test2->setTarget("B");
+		test2->waitUntilSettled();
+		indexer.move_velocity(600);
+		launcher.move_velocity(600);
+		pros::delay(800);
+		setintake(0);
+		pros::delay(400);
+		indexer.move_velocity(-600);
+		launcher.move_velocity(-600);
+		setintake(-600);
+		pros::delay(200);
+		test->moveDistance(-24_in);
+		test->waitUntilSettled();
+		setintake(0);
+		launcher.move_velocity(0);
+		indexer.move_velocity(0);
+	}
+	if(auton == 2){
+		setintake(-600);
+		pros::delay(200);
+		setintake(0);
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{36_in,0_in,0_deg}},
+			"A"
+		);
+		test2->setTarget("A");
+		test2->waitUntilSettled();
+		test->turnToAngle(60_deg);
+		test->waitUntilSettled();
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{24_in,0_in,0_deg}},
+			"B"
+		);
+		setintake(600);
+		indexer.move_velocity(600);
+		test2->setTarget("B");
+		test2->waitUntilSettled();
+		pros::delay(500);
+		setintake(0);
+		launcher.move_velocity(600);
+		pros::delay(500);
+		launcher.move_velocity(-600);
+		indexer.move_velocity(-600);
+		setintake(-600);
+		test->moveDistance(-14_in);
+		test2->waitUntilSettled();
+		launcher.move_velocity(0);
+		indexer.move_velocity(0);
+		setintake(0);
+		test->turnAngle(143_deg);
+		test->waitUntilSettled();
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{48_in,0_in,0_deg}},
+			"C"
+		);
+		test2->setTarget("C");
+		test2->waitUntilSettled();
+		test->turnAngle(-95_deg);
+		test->waitUntilSettled();
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{16_in,0_in,0_deg}},
 			"D"
 		);
 		test2->setTarget("D");
@@ -85,10 +179,77 @@ void autonhandler(int auton){
 		setintake(600);
 		indexer.move_velocity(600);
 		launcher.move_velocity(600);
-		pros::delay(1000);
+		pros::delay(500);
+		setintake(0);
+		pros::delay(300);
 		launcher.move_velocity(0);
 		indexer.move_velocity(0);
+	}
+	if(auton==3){
+		setintake(-600);
+		pros::delay(100);
+		setintake(600);
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{24_in,0_in,0_deg}},
+			"A"
+		);
+		test2->setTarget("A");
+		test2->waitUntilSettled();
+		test->turnAngle(140_deg);
+		test->waitUntilSettled();
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{30_in,0_in,0_deg}},
+			"B"
+		);
+		test2->setTarget("B");
+		test2->waitUntilSettled();
+		indexer.move_velocity(600);
+		launcher.move_velocity(600);
+		pros::delay(800);
 		setintake(0);
+		pros::delay(400);
+		indexer.move_velocity(-600);
+		launcher.move_velocity(-600);
+		setintake(-600);
+		pros::delay(200);
+		test->moveDistance(-24_in);
+		test->waitUntilSettled();
+		setintake(0);
+		launcher.move_velocity(0);
+		indexer.move_velocity(0);
+	}
+	if(auton==4){
+		setintake(-600);
+		pros::delay(200);
+		setintake(600);
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{10_in,0_in,-45_deg}},
+			"A"
+		);
+		test2->setTarget("A");
+		test2->waitUntilSettled();
+		test2->generatePath({
+			{0_in,0_in,0_deg},
+			{8_in,0_in,0_deg}},
+			"B"
+		);
+		//test2->setTarget("B");
+		test2->waitUntilSettled();
+		indexer.move_velocity(600);
+		launcher.move_velocity(600);
+		pros::delay(800);
+		setintake(0);
+		pros::delay(400);
+		indexer.move_velocity(-600);
+		launcher.move_velocity(-600);
+		setintake(-600);
+		pros::delay(200);
+	}
+
+
 
 
 
@@ -112,4 +273,3 @@ void autonhandler(int auton){
 		//launcher.move_velocity(0);
 		//setintake(0);
 	}
-}

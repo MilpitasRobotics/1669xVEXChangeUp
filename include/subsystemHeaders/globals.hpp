@@ -15,7 +15,6 @@ extern pros::Motor launcher;
 extern pros::Imu imu_sensor;
 extern pros::ADIEncoder leftEncoder;
 extern pros::ADIEncoder rightEncoder;
-extern pros::ADIDigitalIn choose;
 
 //controller
 extern pros::Controller controller;
