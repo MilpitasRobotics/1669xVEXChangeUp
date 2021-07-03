@@ -19,3 +19,4 @@ int pidturn(int degrees,float speedscale);
 int drivePIDcontrol(float left, float right, float speedscale);
 void intakecontroller();
 void moveForward1(double units, int speed);
+void cyclingMacro(int velocity);

@@ -179,7 +179,7 @@ int pidturn(int degrees,float speedscale = 1) {
   float kp = 0.15;
   float target = imu_sensor.get_heading()+degrees;
   float error = target-imu_sensor.get_heading();
-  int sign;
+  int sign; 
   float voltage;
   while(fabs(error)>3){
     pros::lcd::print(1, "heading value: %f\n", imu_sensor.get_heading());
@@ -241,4 +241,14 @@ void gyroPid (double angle) {
 
     pros::delay(20);
   }
+}
+
+void cyclingMacro(int velocity) {
+  setintake(velocity);
+  indexer.move_velocity(velocity);
+  launcher.move_velocity(velocity);
+  pros::delay(1000);
+  launcher.move_velocity(0);
+  indexer.move_velocity(0);
+  setintake(0);
 }
