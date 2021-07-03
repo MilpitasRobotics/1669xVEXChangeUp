@@ -13,9 +13,11 @@ void competition_initialize(){
 	//initialize() function code
 	pros::lcd::initialize();
 	const char* autonNames[] = {
-		"normal",//this one is regular
-		"joe",//this one prints joe
-		"normal"//this is also regular
+		"2 Goal Left",//this one is regular
+		"1 Goal Left",
+		"2 Goal Right",
+		"1 Goal Right",
+		"turn testing",//this one prints joe
 	};
 	while(true){
 		pros::lcd::print(1, "current auton: %s\n", autonNames[auton]);
@@ -50,5 +52,6 @@ void opcontrol() {
 		//Runs drive
 		motorDrive();
 		launchercontroller();
+		//cycle(600);
 	}
 }
